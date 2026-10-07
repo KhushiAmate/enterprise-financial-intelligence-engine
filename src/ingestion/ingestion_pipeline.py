@@ -3,7 +3,7 @@ from src.profiling.schema_profiler import profile_dataframe
 from src.transformation.schema_mapper import map_columns
 from src.transformation.standardizer import standardize_dataframe
 from src.transformation.ai_schema_mapper import ai_map_columns
-
+from src.validation.schema_validator import validate_dataframe
 
 def process_file(file_path: str):
     """
@@ -35,10 +35,11 @@ def process_file(file_path: str):
 
     # 5. Standardize dataframe
     standardized_df = standardize_dataframe(df, mapping)
-
+    validation_result = validate_dataframe(standardized_df)
     return {
         "original_dataframe": df,
         "profile": profile,
         "mapping": mapping,
         "standardized_dataframe": standardized_df,
+        "validation": validation_result,
     }
