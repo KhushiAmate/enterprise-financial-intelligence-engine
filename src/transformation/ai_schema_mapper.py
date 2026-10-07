@@ -11,32 +11,43 @@ llm = ChatOllama(
 )
 
 
-def ai_map_column(column_name: str) -> str | None:
+def ai_map_columns(column_names: list[str]) -> dict[str, str | None]:
     """
-    Ask the local LLM to map an unknown source column
-    to one of the supported standard financial fields.
+    Map multiple unknown source columns to standard fields
+    using a single LLM call.
     """
+
+    if not column_names:
+        return {}
 
     standard_fields = list(STANDARD_FIELDS.keys())
 
     prompt = f"""
 You are a data engineering schema mapping assistant.
 
-Map the source column to exactly one of these standard fields:
+Map each source column to the most appropriate standard financial field.
+
+Allowed standard fields:
 
 {standard_fields}
 
-Source column:
-{column_name}
+Source columns:
 
-Return ONLY valid JSON in this format:
+{column_names}
 
-{{"mapped_field": "field_name"}}
+Return ONLY valid JSON.
 
-If the column does not clearly match any standard field,
-return:
+The JSON keys must be the source column names.
+The values must be one of the allowed standard fields or null.
 
-{{"mapped_field": null}}
+Example:
+
+{{
+    "supplier_name": "vendor",
+    "invoice_total": "amount",
+    "cost_center": "department",
+    "random_column": null
+}}
 
 Do not provide explanations.
 """
@@ -47,12 +58,17 @@ Do not provide explanations.
 
     try:
         result = json.loads(content)
-        mapped_field = result.get("mapped_field")
+    except json.JSONDecodeError:
+        return {column: None for column in column_names}
+
+    validated_result = {}
+
+    for column in column_names:
+        mapped_field = result.get(column)
 
         if mapped_field in standard_fields:
-            return mapped_field
+            validated_result[column] = mapped_field
+        else:
+            validated_result[column] = None
 
-    except json.JSONDecodeError:
-        pass
-
-    return None
+    return validated_result

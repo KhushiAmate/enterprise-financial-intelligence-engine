@@ -1,7 +1,15 @@
-from src.transformation.ai_schema_mapper import ai_map_column
+from src.transformation.ai_schema_mapper import ai_map_columns
 
 
-def test_ai_map_column():
-    result = ai_map_column("supplier")
+def test_ai_map_columns():
+    result = ai_map_columns(
+        [
+            "supplier",
+            "invoice_total",
+            "cost_center",
+        ]
+    )
 
-    assert result == "vendor"
+    assert result["supplier"] == "vendor"
+    assert result["invoice_total"] == "amount"
+    assert result["cost_center"] == "department"
