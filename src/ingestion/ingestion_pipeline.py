@@ -2,11 +2,15 @@ from src.ingestion.file_reader import read_file
 from src.profiling.schema_profiler import profile_dataframe
 from src.transformation.schema_mapper import map_columns
 from src.transformation.standardizer import standardize_dataframe
+from src.transformation.ai_schema_mapper import ai_map_column
 
 
 def process_file(file_path: str):
     """
     Read, profile, map, and standardize an input file.
+
+    Deterministic mapping is attempted first.
+    AI mapping is used only for unknown columns.
     """
 
     # 1. Read input file
@@ -15,10 +19,15 @@ def process_file(file_path: str):
     # 2. Profile schema
     profile = profile_dataframe(df)
 
-    # 3. Map source columns to standard columns
+    # 3. Deterministic mapping
     mapping = map_columns(list(df.columns))
 
-    # 4. Standardize dataframe
+    # 4. AI fallback for unknown columns
+    for column, mapped_field in mapping.items():
+        if mapped_field is None:
+            mapping[column] = ai_map_column(column)
+
+    # 5. Standardize dataframe
     standardized_df = standardize_dataframe(df, mapping)
 
     return {
