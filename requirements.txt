@@ -1,0 +1,7 @@
+pandas
+python-dotenv
+pyspark
+snowflake-connector-python
+langchain
+langgraph
+langchain-ollama

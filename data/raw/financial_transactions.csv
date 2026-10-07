@@ -1,0 +1,16 @@
+transaction_id,transaction_date,vendor,category,department,amount,currency
+T001,2026-01-05,Amazon Web Services,Cloud,Engineering,12500,USD
+T002,2026-01-08,Microsoft,Software,Engineering,8500,USD
+T003,2026-01-10,Google Cloud,Cloud,Data,9200,USD
+T004,2026-01-15,Accenture,Consulting,Finance,18000,USD
+T005,2026-01-20,Amazon Web Services,Cloud,Data,14300,USD
+T006,2026-02-02,Microsoft,Software,Engineering,9200,USD
+T007,2026-02-10,Google Cloud,Cloud,Data,11500,USD
+T008,2026-02-15,Deloitte,Consulting,Finance,15500,USD
+T009,2026-02-20,Amazon Web Services,Cloud,Engineering,16700,USD
+T010,2026-03-01,Microsoft,Software,Data,7800,USD
+T011,2026-03-05,Oracle,Database,Engineering,6200,USD
+T012,2026-03-12,Accenture,Consulting,Finance,21000,USD
+T013,2026-03-18,Google Cloud,Cloud,Engineering,13200,USD
+T014,2026-03-22,Oracle,Database,Data,7100,USD
+T015,2026-03-28,Deloitte,Consulting,Finance,12800,USD
