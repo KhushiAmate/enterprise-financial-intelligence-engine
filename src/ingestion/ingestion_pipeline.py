@@ -1,0 +1,29 @@
+from src.ingestion.file_reader import read_file
+from src.profiling.schema_profiler import profile_dataframe
+from src.transformation.schema_mapper import map_columns
+from src.transformation.standardizer import standardize_dataframe
+
+
+def process_file(file_path: str):
+    """
+    Read, profile, map, and standardize an input file.
+    """
+
+    # 1. Read input file
+    df = read_file(file_path)
+
+    # 2. Profile schema
+    profile = profile_dataframe(df)
+
+    # 3. Map source columns to standard columns
+    mapping = map_columns(list(df.columns))
+
+    # 4. Standardize dataframe
+    standardized_df = standardize_dataframe(df, mapping)
+
+    return {
+        "original_dataframe": df,
+        "profile": profile,
+        "mapping": mapping,
+        "standardized_dataframe": standardized_df,
+    }
